@@ -35,10 +35,12 @@ public class genareteCorpus {
 
     }
 
-    String[] positive(String[] line,int window){
+    String[] positive(Double[] line,int window){
         HashMap<String,Double> pos=new HashMap<String, Double>();
-        for(){
-
+        for(int i=0;i<line.length;i++){
+            if(line[i]>0){
+                pos.put(Integer.toString(i+1),line[i]);
+            }
         }
     }
 

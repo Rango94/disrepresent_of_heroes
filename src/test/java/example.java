@@ -12,20 +12,20 @@ public class example {
         int size=100;
 
 //        读取语料文件并生成模型
-//        Model md=new Model("E:/text8/text8.txt",size);
-//
-////        新建训练类并设定参数
-//        Trainer tr=new Trainer(md,3,false,0.025);
-//
-////        训练模型
-//        md=tr.train();
-//
-////        保存模型
-//        md.Savemodel("E:\\myw2v\\first.model");
+        Model md=new Model("E:/disrepresent_of_heroes/anticorpus.txt","E:/disrepresent_of_heroes/combcorpus.txt",size);
+
+//        新建训练类并设定参数
+        Trainer tr=new Trainer(md,0.025);
+
+//        训练模型
+        md=tr.train();
+
+//        保存模型
+        md.Savemodel("E:\\disrepresent_of_heroes\\heromodel.model");
 
 //        读取模型
         Model md1=new Model();
-        md1.Loadmodel("E:\\myw2v\\first.model");
+        md1.Loadmodel("E:\\disrepresent_of_heroes\\heromodel.model");
 //        寻找训练语料中最相近的两个单词
 //        double cha=-1;
 //        for(int i=0;i<md1.getTermnum();i++){

@@ -9,20 +9,21 @@ import java.util.HashMap;
 import java.util.List;
 
 public class corpusReader {
-
+    int window=0;
     public BufferedReader br;
-    int windos;
-    boolean weatherfill;
     String Path;
-    public corpusReader(String path,int windos,boolean weatherfill, List<String> lowwords){
+
+    public int getWindow() {
+        return window;
+    }
+
+    public corpusReader(String path){
         try {
             br = new BufferedReader(new FileReader(path));
         } catch (IOException e) {
             e.printStackTrace();
         }
         this.Path=path;
-        this.weatherfill=weatherfill;
-        this.windos=windos;
     }
 
     public corpusReader(){
@@ -33,14 +34,19 @@ public class corpusReader {
         HashMap<List<String>,Vector> subcorpus=new HashMap<List<String>,Vector>();
         try {
             String line_str;
-            String[] line=null;
             line_str=br.readLine();
             int num=0;
-            while(line_str!=null&&num<200) {
+            while(num<110) {
+                if(line_str==null){
+                    br=new BufferedReader(new FileReader(Path));
+                    line_str=br.readLine();
+                }
                 num++;
-                line = line_str.split("\t");
+                String[] line = line_str.split("\t");
                 Vector input = new Vector(mod.getSize(), 0);
-                int window = (line.length - 1) / 2;
+                if(window==0) {
+                    window = (line.length - 1) / 2;
+                }
                 List<String> heroes=new ArrayList<String>();
                 for (int i = 0; i < line.length; i++) {
                     heroes.add(line[i]);

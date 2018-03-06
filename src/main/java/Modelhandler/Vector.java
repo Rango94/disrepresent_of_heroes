@@ -94,13 +94,12 @@ public class Vector {
     }
 
     public static double dis(Vector a,Vector b){
-        double out=0.0;
-        double stand=0.0;
+        double up=mult(a,b);
+        double down=0;
         for(int i=0;i<a.getSize();i++){
-            stand+=(Math.abs(a.vector[i])+Math.abs(b.vector[i]))/2;
-            out+=Math.pow((a.vector[i]-b.vector[i]),2)/Math.pow(stand,2);
+            down+=Math.pow(a.vector[i]*a.vector[i]+b.vector[i]*b.vector[i],0.5);
         }
-        return Math.pow(out,0.5);
+        return up/down;
     }
 
 }

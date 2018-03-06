@@ -6,8 +6,8 @@ import java.util.List;
 public class genareteCorpus {
 
     public static void main(String[] args){
-        genareteCorpus("E:/disrepresent_of_heroes/anti.txt","E:/disrepresent_of_heroes/anticorpus.txt",3,10000,false);
-        genareteCorpus("E:/disrepresent_of_heroes/comb.txt","E:/disrepresent_of_heroes/combcorpus.txt",3,10000,false);
+        genareteCorpus("E:/disrepresent_of_heroes/anti.txt","E:/disrepresent_of_heroes/anticorpus.txt",3,20000,true);
+        genareteCorpus("E:/disrepresent_of_heroes/comb.txt","E:/disrepresent_of_heroes/combcorpus.txt",3,20000,true);
     }
     public static void genareteCorpus(String inpath,String outpath,int window,int length,boolean chaos){
         double[][] cor=new double[114][114];

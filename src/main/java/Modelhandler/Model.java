@@ -31,9 +31,9 @@ public class Model {
         hm1=new Huffman(path1,size);
         System.out.println("building Huffman 2...");
         hm2=new Huffman(path2,size);
-//        hm.notleafstoString();
         System.out.println("initial model...");
         initModel(hm1.Termset,size);
+        System.out.println("model size is "+hm1.Termset.size()+"\t"+hm2.Termset.size());
         PATH1=path1;
         PATH2=path2;
     }
@@ -45,7 +45,7 @@ public class Model {
         if(num>50){
             num=50;
         }
-        double F=0;
+        double F=1000;
         Vector term_v=getVector(term);
         if(term_v==null){
             System.out.println("null");
@@ -54,12 +54,12 @@ public class Model {
             List<Double> vecs = new ArrayList<Double>();
             for (int i = 0; i < num; i++) {
                 String name = "";
-                double d = 10000;
+                double d = 0;
                 for (String e : termlist) {
                     if (!e.equals(term)) {
                         Vector e_v = getVector(e);
                         double temp = Vector.dis(e_v, term_v);
-                        if (temp < d && temp >= F && !terms.contains(e)) {
+                        if (temp > d && temp <= F && !terms.contains(e)) {
                             d = temp;
                             name = e;
                         }

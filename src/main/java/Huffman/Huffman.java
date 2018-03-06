@@ -24,8 +24,6 @@ public class Huffman {
 
     public int totalnum=0;
 
-    public List<String> lowwords=new ArrayList<String>();
-
     public int getMaxlenthofhuffman() {
         return maxlenthofhuffman;
     }
@@ -254,35 +252,22 @@ public class Huffman {
 //  读取语料文件
     private HashMap<String, Integer> readcorpus(String corpuspath) {
         try {
-            Reader  br = new InputStreamReader (new FileInputStream( new File(corpuspath)));
-            int tempbyte;
-            String term="";
-            while ((tempbyte = br.read()) != -1) {
-                char w=(char)tempbyte;
-                if(Character.isSpaceChar(w)||tempbyte==10||tempbyte==13){
-                    if(term!=""){
-                        totalnum++;
-                        if (dictionary.containsKey(term)) {
-                            dictionary.put(term, dictionary.get(term) + 1);
-                        } else {
-                            dictionary.put(term, 1);
-                        }
+            BufferedReader  br = new BufferedReader(new FileReader(corpuspath));
+            String line=br.readLine();
+            int c=0;
+            while (line!=null) {
+                for (String term : line.split("\t")) {
+                    totalnum++;
+                    if (dictionary.containsKey(term)) {
+                        dictionary.put(term, dictionary.get(term) + 1);
+                    } else {
+                        dictionary.put(term, 1);
                     }
-                    term="";
-                }else {
-                    term += String.valueOf(w);
                 }
+                c++;
+                line=br.readLine();
             }
             br.close();
-            lowwords=new ArrayList<String>();
-            for(String e:dictionary.keySet()){
-                if(dictionary.get(e)<10){
-                    lowwords.add(e);
-                }
-            }
-            for(String e:lowwords){
-                dictionary.remove(e);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }

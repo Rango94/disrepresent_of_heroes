@@ -95,11 +95,15 @@ public class Vector {
 
     public static double dis(Vector a,Vector b){
         double up=mult(a,b);
-        double down=0;
+        double downa=1;
         for(int i=0;i<a.getSize();i++){
-            down+=Math.pow(a.vector[i]*a.vector[i]+b.vector[i]*b.vector[i],0.5);
+            downa+=Math.pow(a.vector[i]*a.vector[i],0.5);
         }
-        return up/down;
+        double downb=1;
+        for(int i=0;i<a.getSize();i++){
+            downa+=Math.pow(b.vector[i]*b.vector[i],0.5);
+        }
+        return up/(downa*downb);
     }
 
 }

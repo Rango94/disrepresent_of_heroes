@@ -10,8 +10,10 @@ import java.util.Set;
 
 public class Model {
     public HashMap<String,HashMap<String,Vector>> model=new HashMap<String, HashMap<String,Vector>>();
-    public Huffman hm=null;
-    public String PATH;
+    public Huffman hm1=null;
+    public Huffman hm2=null;
+    public String PATH1;
+    public String PATH2;
     private static int Size=0;
     public int termnum=0;
     private List<String> termlist=new ArrayList<String>();
@@ -24,13 +26,16 @@ public class Model {
         return termlist;
     }
 
-    public Model(String path, int size){
-        System.out.println("building Huffman...");
-        hm=new Huffman(path,size);
+    public Model(String path1,String path2, int size){
+        System.out.println("building Huffman 1...");
+        hm1=new Huffman(path1,size);
+        System.out.println("building Huffman 2...");
+        hm2=new Huffman(path2,size);
 //        hm.notleafstoString();
         System.out.println("initial model...");
-        initModel(hm.Termset,size);
-        PATH=path;
+        initModel(hm1.Termset,size);
+        PATH1=path1;
+        PATH2=path2;
     }
     public Model(){
 

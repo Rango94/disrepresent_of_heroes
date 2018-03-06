@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Trainer {
-    static Huffman hm;
-    corpusReader cr;
+    static Huffman hm1;
+    static Huffman hm2;
+    corpusReader cr1;
+    corpusReader cr2;
     Model md;
     int windos;
     boolean weatherfill;
@@ -27,15 +29,21 @@ public class Trainer {
         this.md=md;
         this.step=step;
         this.Step=step;
-        this.hm=md.hm;
-        this.dictionary=hm.dictionary;
-        cr=new corpusReader(md.PATH,windos,weatherfill,md.hm.lowwords);
+        this.hm1=md.hm1;
+        this.hm2=md.hm2;
+        this.dictionary=hm1.dictionary;
+        cr1=new corpusReader(md.PATH1,windos,weatherfill,md.hm1.lowwords);
+        cr2=new corpusReader(md.PATH2,windos,weatherfill,md.hm2.lowwords);
     }
 
     public Model train(){
         double k=0.1;
         for(int i=0;i<maxloop;i++){
-            trainline();
+            if(i%2==0) {
+                trainline(hm1,cr1);
+            }else{
+                trainline(hm2,cr2);
+            }
             if(i%20==0) {
                 step=Step*(1-(double)i/maxloop);
                 System.out.println(md.getVector("mother"));
@@ -65,18 +73,12 @@ public class Trainer {
         return md;
     }
 //  根据一行语料训练
-    public void trainline(){
+    public void trainline(Huffman hm,corpusReader cr){
         HashMap<List<String>, Vector> corpusline = cr.handlesent(md);
         if (corpusline!=null) {
             for (List<String> e : corpusline.keySet()) {
                 int termcont=dictionary.get(e.get(windos));
                 double t=(double)termcont/hm.totalnum;
-                if(t>0.0005){
-                    if(Math.random()<1-Math.pow((0.0005/t),0.5)){
-//                        System.out.println("跳过单词:"+e.get(windos)+"\t"+"频数为:"+Integer.toString(termcont));
-                        continue;
-                    }
-                }
                 Vector inputvector = corpusline.get(e);
                 byte[] Huffmanofterm = hm.getHuffmancode(e.get(windos));
                 if(Huffmanofterm==null){
@@ -87,34 +89,20 @@ public class Trainer {
                     Vector addofinput = new Vector(inputvector.getSize(), 0);
                     int path=0;
                     for (String subpath : pathlist) {
-                        int flag=Math.random()>0.9999?1:1;
                         Vector pathvector = hm.getVectorofnotleafbyHuffman(subpath);
-                        if(flag==0) {
-                        System.out.println("参数向量为："+pathvector);
-                        }
+
                         double q = active(Vector.mult(pathvector, inputvector));
-                        if(flag==0) {
-                        System.out.println("激活函数参数："+Double.toString(Vector.mult(pathvector, inputvector)));
-                        System.out.println("激活函数："+Double.toString(q));
-                        }
+
                         double g = step * (1 - Huffmanofterm[path] - q);
                         path++;
-                        if(flag==0) {
-                        System.out.println("g等于："+Double.toString(g)+"\t学习率为："+Double.toString(step));
-                        }
+
                         addofinput = Vector.adds(addofinput, Vector.mult(g, pathvector));
-                        if(flag==0) {
-                        System.out.println("term增量为："+addofinput);
 
                         hm.setVectorofnotleafbyHuffman(subpath, Vector.adds(Vector.mult(g, inputvector), pathvector));
-                        }
                         Vector tmp=Vector.mult(g, inputvector);
                         for(int i=0;i<pathvector.getSize();i++) {
                             pathvector.vector[i]=pathvector.vector[i]+tmp.vector[i];
                         }
-                      if(flag==0) {
-                            System.out.print("参数向量增量为：" + Vector.mult(g, inputvector)+"\n"+"\n");
-                       }
                     }
                     for (int i = 0; i < e.size(); i++) {
                         if (i != windos) {
